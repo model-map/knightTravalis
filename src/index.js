@@ -1,6 +1,9 @@
 import "./style.css";
 
 function getLegalMoves(x, y) {
+  if ((x < 0) | (x > 7) | (y < 0) | (y > 7)) {
+    alert("ENTER LEGAL MOVE");
+  }
   let coordinates = [
     [-2, -1],
     [-2, 1],
@@ -15,8 +18,11 @@ function getLegalMoves(x, y) {
   let legalMoves = [];
   coordinates.forEach((item) => {
     let move = [];
-    move.push(item[0] + x);
-    move.push(item[1] + y);
+    let newX = item[0] + x;
+    let newY = item[1] + y;
+    if ((newX < 0) | (newX > 7) | (newY < 0) | (newY > 7)) return;
+    move.push(newX);
+    move.push(newY);
     legalMoves.push(move);
   });
   return legalMoves;
@@ -37,7 +43,6 @@ function buildTree(arr) {
     let node = Node(arr[mid][0], arr[mid][1]);
     node.left = buildTree(arr.slice(0, mid));
     node.right = buildTree(arr.slice(mid + 1));
-    console.log(node);
     return node;
   }
 }
@@ -55,7 +60,6 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-let moves = getLegalMoves(5, 3);
+let moves = getLegalMoves(0, 0);
 let root = buildTree(moves);
-console.log(root);
 prettyPrint(root);
