@@ -22,4 +22,40 @@ function getLegalMoves(x, y) {
   return legalMoves;
 }
 
-console.log(getLegalMoves(5, 3));
+const Node = (x, y, left = null, right = null) => {
+  let sum = x + y;
+  return { x, y, sum, left, right };
+};
+
+function buildTree(arr) {
+  if (arr.length == 0) return null;
+  if (arr.length == 1) {
+    let node = Node(arr[0][0], arr[0][1]);
+    return node;
+  } else {
+    let mid = Math.floor((arr.length - 1) / 2);
+    let node = Node(arr[mid][0], arr[mid][1]);
+    node.left = buildTree(arr.slice(0, mid));
+    node.right = buildTree(arr.slice(mid + 1));
+    console.log(node);
+    return node;
+  }
+}
+
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+  if (node == null) {
+    return;
+  }
+  if (node.right != null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}(${node.x},${node.y})`);
+  if (node.left != null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  }
+};
+
+let moves = getLegalMoves(5, 3);
+let root = buildTree(moves);
+console.log(root);
+prettyPrint(root);
